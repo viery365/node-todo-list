@@ -4,42 +4,29 @@ const yargs = require('yargs');
 
 const tasks = require('./tasks');
 
-const commandsDesc = {
-    add: 'Adds a task',
-    list: 'Lists all tasks'
-};
 
-const commands = Object.keys(commandsDesc);
-const descs = Object.values(commandsDesc);
 
-const argv = yargs
-    .command(commands[0], descs[0])
-    .command(commands[1], descs[1])
-    .help()
+let argv = yargs
+    .command('add', 'Adds a task')
+    .command('list', 'Lists all tasks')
+     .help()
     .argv;
+    
 
-let argvArray = argv._;
+let argvCommands = argv._;
 
 const command = argv._[0];
 
 if (command === 'add'){
 
-     argvArray.shift();
-     
-     var findOne = function (haystack, arr) {
-        return arr.some(function (v) {
-            return haystack.indexOf(v) >= 0;
-        });
-    };
-    // //{ _: ['read', 'a', 'book' ],...
+    argvCommands.shift();
 
-    // console.log(listOfCommands);
+    const argvCommandsToString = argvCommands.join(' ');
 
-    if(argv._[1] === undefined){
+    if(argvCommands.length === 0){
         console.log('You must provide a task');
     }else {
-        var task = tasks.addTask(argv._[1]);
-
+        var task = tasks.addTask(argvCommandsToString);
         console.log('Task created');
         tasks.logTask(task);
     }
