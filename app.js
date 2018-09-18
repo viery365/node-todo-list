@@ -21,11 +21,12 @@ if (command === "add") {
 
   if (argvCommands.length === 0) {
     console.log("You must provide a task.");
-    console.log("ex: node app.js task first task");
+    console.log("ex: 'node app.js task first task'");
   } else {
-    var task = tasks.addTask(argvCommandsToString);
+    let task = tasks.addTask(argvCommandsToString);
     console.log("Task created");
     console.log("---");
+    console.log(`Id: ${task.id}`);
     console.log(`Task: ${task.task}`);
   }
 } else if (command === "list") {
@@ -38,7 +39,7 @@ if (command === "add") {
   if (allTasks.length > 0) {
     console.log(`Printing ${allTasks.length} task(s).`);
     allTasks.forEach(task => {
-      console.log(task.task);
+      console.log(`${task.id}.`, task.task);
     });
   } else {
     console.log("You have 0 tasks");

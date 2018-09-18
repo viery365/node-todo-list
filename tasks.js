@@ -18,9 +18,16 @@ var saveTask = task => {
 var addTask = task => {
   var tasks = fetchTasks();
 
-  var task = {
+  task = {
     task
   };
+
+  if (tasks.length === 0) {
+    task.id = 1;
+  } else {
+    const lastTask = tasks[tasks.length - 1];
+    task.id = lastTask.id + 1;
+  }
 
   tasks.push(task);
   saveTask(tasks);
