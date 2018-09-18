@@ -20,7 +20,8 @@ if (command === "add") {
   const argvCommandsToString = argvCommands.join(" ");
 
   if (argvCommands.length === 0) {
-    console.log("You must provide a task");
+    console.log("You must provide a task.");
+    console.log("ex: node app.js task first task");
   } else {
     var task = tasks.addTask(argvCommandsToString);
     console.log("Task created");
