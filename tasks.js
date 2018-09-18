@@ -11,8 +11,8 @@ var fetchTasks = () => {
   }
 };
 
-var saveTask = task => {
-  fs.writeFileSync("tasks-db.json", JSON.stringify(task));
+var saveTasks = tasks => {
+  fs.writeFileSync("tasks-db.json", JSON.stringify(tasks));
 };
 
 var addTask = task => {
@@ -30,7 +30,7 @@ var addTask = task => {
   }
 
   tasks.push(task);
-  saveTask(tasks);
+  saveTasks(tasks);
   return task;
 };
 var getAll = () => {
@@ -41,21 +41,46 @@ var getNote = title => {
   var filteredNotes = notes.filter(note => note.title === title);
   return filteredNotes[0];
 };
-var removeNote = title => {
-  //fetch notes
-  var notes = fetchNotes();
-  //filter notes, removing the one with the title of the argument
-  var filteredNotes = notes.filter(note => note.title !== title);
-  //save new notes array
-  saveNotes(filteredNotes);
+var removeTask = id => {
+  var tasks = fetchTasks();
+  if (tasks.length === 0) {
+    return "empty";
+  }
+  //filter tasks, removing the one with the same id
+  var filteredTasks = tasks.filter(task => task.id !== id);
+  //save new tasks array
+  saveTasks(filteredTasks);
+  //check if a task was removed
+  return tasks.length !== filteredTasks.length;
+};
 
-  //check if a note was removed
-  return notes.length !== filteredNotes.length;
+var checkExtraWords = (commands, message) => {
+  if (commands.length >= 2) {
+    console.log("///////////");
+    console.log(message);
+    console.log("///////////");
+  }
+};
+
+var reorderList = () => {
+  var tasks = fetchTasks();
+
+  if (tasks.length === 0) {
+    return;
+  } else {
+    tasks.forEach((task, index) => {
+      task.id = index + 1;
+    });
+  }
+
+  saveTasks(tasks);
 };
 
 module.exports = {
   addTask,
   getAll,
   getNote,
-  removeNote
+  removeTask,
+  checkExtraWords,
+  reorderList
 };
