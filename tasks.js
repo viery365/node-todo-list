@@ -15,6 +15,16 @@ var saveTasks = tasks => {
   fs.writeFileSync("tasks-db.json", JSON.stringify(tasks));
 };
 
+var warningNoTasks = () => {
+  console.log("You have no tasks.");
+  console.log("Use 'node app.js add <name of the task>' to add a task.");
+};
+
+var warningNoTask = taskId => {
+  console.log(`task ${taskId} doesn't exist`);
+  console.log("To see the tasks you have available use: node app.js list");
+};
+
 var addTask = task => {
   var tasks = fetchTasks();
 
@@ -31,16 +41,13 @@ var addTask = task => {
 
   tasks.push(task);
   saveTasks(tasks);
+
   return task;
 };
 var getAll = () => {
   return fetchTasks();
 };
-var getNote = title => {
-  var notes = fetchNotes();
-  var filteredNotes = notes.filter(note => note.title === title);
-  return filteredNotes[0];
-};
+
 var removeTask = id => {
   var tasks = fetchTasks();
   if (tasks.length === 0) {
@@ -76,11 +83,37 @@ var reorderList = () => {
   saveTasks(tasks);
 };
 
+var getTaskId = commands => {
+  commands.shift();
+  return commands[0];
+};
+
+var editTask = (taskId, taskName) => {
+  var tasks = fetchTasks();
+  if (tasks.length === 0) {
+    warningNoTasks();
+    return;
+  }
+  let task = tasks.find(task => {
+    return task.id === taskId;
+  });
+  if (task === undefined) {
+    warningNoTask(taskId);
+    return;
+  }
+  task.task = taskName;
+  saveTasks(tasks);
+  console.log("Task saved.");
+  console.log(`${taskId}. ${taskName}`);
+};
+
 module.exports = {
   addTask,
   getAll,
-  getNote,
   removeTask,
   checkExtraWords,
-  reorderList
+  reorderList,
+  getTaskId,
+  editTask,
+  warningNoTask
 };
