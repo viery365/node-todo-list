@@ -21,7 +21,7 @@ var warningNoTasks = () => {
 };
 
 var warningNoTask = taskId => {
-  console.log(`task ${taskId} doesn't exist`);
+  console.log(`task ${taskId} not found`);
   console.log("To see the tasks you have available use: node app.js list");
 };
 
@@ -44,28 +44,33 @@ var addTask = task => {
 
   return task;
 };
-var getAll = () => {
-  return fetchTasks();
+var listTasks = () => {
+  let allTasks = fetchTasks();
+  if (allTasks.length > 0) {
+    console.log(`Printing ${allTasks.length} task(s).`);
+    allTasks.forEach(task => {
+      console.log(`${task.id}.`, task.task);
+    });
+  } else {
+    warningNoTasks();
+  }
 };
 
-var removeTask = id => {
+var removeTask = taskId => {
   var tasks = fetchTasks();
   if (tasks.length === 0) {
-    return "empty";
+    warningNoTasks();
   }
   //filter tasks, removing the one with the same id
-  var filteredTasks = tasks.filter(task => task.id !== id);
-  //save new tasks array
-  saveTasks(filteredTasks);
+  var filteredTasks = tasks.filter(task => task.id !== taskId);
   //check if a task was removed
-  return tasks.length !== filteredTasks.length;
-};
-
-var checkExtraWords = (commands, message) => {
-  if (commands.length >= 2) {
-    console.log("///////////");
-    console.log(message);
-    console.log("///////////");
+  if (tasks.length !== filteredTasks.length) {
+    //save new tasks array
+    saveTasks(filteredTasks);
+    console.log(`Task ${taskId} was removed.`);
+    reorderList();
+  } else {
+    warningNoTask(taskId);
   }
 };
 
@@ -107,9 +112,8 @@ var editTask = (taskId, taskName) => {
 
 module.exports = {
   addTask,
-  getAll,
+  listTasks,
   removeTask,
-  checkExtraWords,
   reorderList,
   getTaskId,
   editTask,

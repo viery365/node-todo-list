@@ -19,14 +19,14 @@ let argv = yargs
     name: nameOptions
   })
   .command("list", "Lists all tasks")
-  .command("remove", "Remove task")
+  .command("remove", "Remove task", {
+    task: taskOptions
+  })
   .command("edit", "Edit task", {
     task: taskOptions,
     name: nameOptions
   })
   .help().argv;
-
-let commands = argv._;
 
 const command = process.argv[2];
 
@@ -38,34 +38,13 @@ if (command === "add") {
   console.log(`Id: ${task.id}`);
   console.log(`Task: ${taskName}`);
 } else if (command === "list") {
-  tasks.checkExtraWords(
-    commands,
-    "Next time just use 'list', it will be enough"
-  );
-  var allTasks = tasks.getAll();
-  if (allTasks.length > 0) {
-    console.log(`Printing ${allTasks.length} task(s).`);
-    allTasks.forEach(task => {
-      console.log(`${task.id}.`, task.task);
-    });
-  } else {
-    console.log("You have 0 tasks");
-  }
+  tasks.listTasks();
 } else if (command === "remove") {
-  let taskId = tasks.getTaskId(commands);
+  let taskId = argv.task;
   if (Number.isInteger(taskId) && taskId > 0) {
-    tasks.checkExtraWords(
-      commands,
-      "Next time just provide the number of the task, it will be enough"
-    );
-    const taskRemoved = tasks.removeTask(taskId);
-    if (taskRemoved && taskRemoved !== "empty") {
-      console.log(`Task ${taskId} was removed.`);
-      tasks.reorderList();
-    } else {
-      console.log("Task not found. Try again.");
-      console.log("Use 'node app.js list' to check your tasks.");
-    }
+    tasks.removeTask(taskId);
+  } else if (taskId <= 0) {
+    tasks.warningNoTask(taskId);
   } else {
     console.log("You must provide the number of the task to remove.");
   }
