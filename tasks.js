@@ -103,8 +103,6 @@ var editTask = (taskId, taskName) => {
   }
   task.task = taskName;
   saveTasks(tasks);
-  console.log("Task saved.");
-  console.log(`${taskId}. ${taskName}`);
 };
 
 module.exports = {

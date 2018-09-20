@@ -15,7 +15,9 @@ const taskOptions = {
 };
 
 let argv = yargs
-  .command("add", "Adds a task")
+  .command("add", "Adds a task", {
+    name: nameOptions
+  })
   .command("list", "Lists all tasks")
   .command("remove", "Remove task")
   .command("edit", "Edit task", {
@@ -29,20 +31,12 @@ let commands = argv._;
 const command = process.argv[2];
 
 if (command === "add") {
-  commands.shift();
-
-  const commandsToString = commands.join(" ");
-
-  if (commands.length === 0) {
-    console.log("You must provide a task.");
-    console.log("ex: 'node app.js task first task'");
-  } else {
-    let task = tasks.addTask(commandsToString);
-    console.log("Task created");
-    console.log("---");
-    console.log(`Id: ${task.id}`);
-    console.log(`Task: ${task.task}`);
-  }
+  let taskName = argv.name;
+  let task = tasks.addTask(taskName);
+  console.log("Task created");
+  console.log("---");
+  console.log(`Id: ${task.id}`);
+  console.log(`Task: ${taskName}`);
 } else if (command === "list") {
   tasks.checkExtraWords(
     commands,
@@ -80,6 +74,8 @@ if (command === "add") {
   const taskName = argv.name;
   if (Number.isInteger(taskId) && taskId > 0) {
     tasks.editTask(taskId, taskName);
+    console.log("Task saved.");
+    console.log(`${taskId}. ${taskName}`);
   } else if (taskId <= 0) {
     tasks.warningNoTask(taskId);
   } else {
