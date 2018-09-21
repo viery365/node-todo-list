@@ -116,7 +116,6 @@ module.exports = {
   addTask,
   listTasks,
   removeTask,
-  reorderList,
   editTask,
   warningNoTask,
   logTask
