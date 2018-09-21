@@ -47,7 +47,7 @@ var addTask = task => {
 var listTasks = () => {
   let allTasks = fetchTasks();
   if (allTasks.length > 0) {
-    console.log(`Printing ${allTasks.length} task(s).`);
+    console.log(`You have ${allTasks.length} task(s).`);
     allTasks.forEach(task => {
       console.log(`${task.id}.`, task.task);
     });
