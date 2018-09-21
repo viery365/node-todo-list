@@ -110,6 +110,13 @@ var editTask = (taskId, taskName) => {
   saveTasks(tasks);
 };
 
+let logTask = (message, taskId, taskName) => {
+  console.log(`Task ${message}`);
+  console.log("---");
+  console.log(`Id: ${taskId}`);
+  console.log(`Task: ${taskName}`);
+};
+
 module.exports = {
   addTask,
   listTasks,
@@ -117,5 +124,6 @@ module.exports = {
   reorderList,
   getTaskId,
   editTask,
-  warningNoTask
+  warningNoTask,
+  logTask
 };

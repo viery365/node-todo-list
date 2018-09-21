@@ -1,5 +1,5 @@
 const fs = require("fs");
-const _ = require("lodash");
+
 const yargs = require("yargs");
 
 const tasks = require("./tasks");
@@ -14,7 +14,7 @@ const taskOptions = {
   demandOption: true
 };
 
-let argv = yargs
+const argv = yargs
   .command("add", "Adds a task", {
     name: nameOptions
   })
@@ -31,16 +31,13 @@ let argv = yargs
 const command = process.argv[2];
 
 if (command === "add") {
-  let taskName = argv.name;
-  let task = tasks.addTask(taskName);
-  console.log("Task created");
-  console.log("---");
-  console.log(`Id: ${task.id}`);
-  console.log(`Task: ${taskName}`);
+  const taskName = argv.name;
+  const task = tasks.addTask(taskName);
+  tasks.logTask("created", task.id, taskName);
 } else if (command === "list") {
   tasks.listTasks();
 } else if (command === "remove") {
-  let taskId = argv.task;
+  const taskId = argv.task;
   if (Number.isInteger(taskId) && taskId > 0) {
     tasks.removeTask(taskId);
   } else if (taskId <= 0) {
@@ -54,7 +51,7 @@ if (command === "add") {
   if (Number.isInteger(taskId) && taskId > 0) {
     tasks.editTask(taskId, taskName);
     console.log("Task saved.");
-    console.log(`${taskId}. ${taskName}`);
+    tasks.logTask("saved", taskId, taskName);
   } else if (taskId <= 0) {
     tasks.warningNoTask(taskId);
   } else {
