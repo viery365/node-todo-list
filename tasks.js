@@ -11,6 +11,27 @@ var fetchTasks = () => {
   }
 };
 
+var reorderList = () => {
+  var tasks = fetchTasks();
+
+  if (tasks.length === 0) {
+    return;
+  } else {
+    tasks.forEach((task, index) => {
+      task.id = index + 1;
+    });
+  }
+
+  saveTasks(tasks);
+};
+
+let logTask = (message, taskId, taskName) => {
+  console.log(`Task ${message}`);
+  console.log("---");
+  console.log(`Id: ${taskId}`);
+  console.log(`Task: ${taskName}`);
+};
+
 var saveTasks = tasks => {
   fs.writeFileSync("tasks-db.json", JSON.stringify(tasks));
 };
@@ -44,6 +65,7 @@ var addTask = task => {
 
   return task;
 };
+
 var listTasks = () => {
   let allTasks = fetchTasks();
   if (allTasks.length > 0) {
@@ -74,20 +96,6 @@ var removeTask = taskId => {
   }
 };
 
-var reorderList = () => {
-  var tasks = fetchTasks();
-
-  if (tasks.length === 0) {
-    return;
-  } else {
-    tasks.forEach((task, index) => {
-      task.id = index + 1;
-    });
-  }
-
-  saveTasks(tasks);
-};
-
 var editTask = (taskId, taskName) => {
   var tasks = fetchTasks();
   if (tasks.length === 0) {
@@ -103,13 +111,6 @@ var editTask = (taskId, taskName) => {
   }
   task.task = taskName;
   saveTasks(tasks);
-};
-
-let logTask = (message, taskId, taskName) => {
-  console.log(`Task ${message}`);
-  console.log("---");
-  console.log(`Id: ${taskId}`);
-  console.log(`Task: ${taskName}`);
 };
 
 module.exports = {
