@@ -47,7 +47,7 @@ var addTask = task => {
 var listTasks = () => {
   let allTasks = fetchTasks();
   if (allTasks.length > 0) {
-    console.log(`You have ${allTasks.length} task(s).`);
+    console.log(`You have ${allTasks.length} task(s):`);
     allTasks.forEach(task => {
       console.log(`${task.id}.`, task.task);
     });
@@ -88,11 +88,6 @@ var reorderList = () => {
   saveTasks(tasks);
 };
 
-var getTaskId = commands => {
-  commands.shift();
-  return commands[0];
-};
-
 var editTask = (taskId, taskName) => {
   var tasks = fetchTasks();
   if (tasks.length === 0) {
@@ -122,7 +117,6 @@ module.exports = {
   listTasks,
   removeTask,
   reorderList,
-  getTaskId,
   editTask,
   warningNoTask,
   logTask
