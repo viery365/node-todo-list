@@ -1,9 +1,9 @@
 const fs = require("fs");
 
-var fetchTasks = () => {
+const fetchTasks = () => {
   try {
     //if file already exists
-    var tasksString = fs.readFileSync("tasks-db.json");
+    const tasksString = fs.readFileSync("tasks-db.json");
     return JSON.parse(tasksString);
   } catch (e) {
     //if there is no file yet
@@ -11,8 +11,8 @@ var fetchTasks = () => {
   }
 };
 
-var reorderList = () => {
-  var tasks = fetchTasks();
+const reorderList = () => {
+  const tasks = fetchTasks();
 
   if (tasks.length === 0) {
     return;
@@ -25,29 +25,29 @@ var reorderList = () => {
   saveTasks(tasks);
 };
 
-let logTask = (message, taskId, taskName) => {
+const logTask = (message, taskId, taskName) => {
   console.log(`Task ${message}`);
   console.log("---");
   console.log(`Id: ${taskId}`);
   console.log(`Task: ${taskName}`);
 };
 
-var saveTasks = tasks => {
+const saveTasks = tasks => {
   fs.writeFileSync("tasks-db.json", JSON.stringify(tasks));
 };
 
-var warningNoTasks = () => {
+const warningNoTasks = () => {
   console.log("You have no tasks.");
   console.log("Use 'node app.js add <name of the task>' to add a task.");
 };
 
-var warningNoTask = taskId => {
+const warningNoTask = taskId => {
   console.log(`task ${taskId} not found`);
   console.log("To see the tasks you have available use: node app.js list");
 };
 
-var addTask = task => {
-  var tasks = fetchTasks();
+const addTask = task => {
+  const tasks = fetchTasks();
 
   task = {
     task
@@ -66,8 +66,8 @@ var addTask = task => {
   return task;
 };
 
-var listTasks = () => {
-  let allTasks = fetchTasks();
+const listTasks = () => {
+  const allTasks = fetchTasks();
   if (allTasks.length > 0) {
     console.log(`You have ${allTasks.length} task(s):`);
     allTasks.forEach(task => {
@@ -78,13 +78,13 @@ var listTasks = () => {
   }
 };
 
-var removeTask = taskId => {
-  var tasks = fetchTasks();
+const removeTask = taskId => {
+  const tasks = fetchTasks();
   if (tasks.length === 0) {
     warningNoTasks();
   }
   //filter tasks, removing the one with the same id
-  var filteredTasks = tasks.filter(task => task.id !== taskId);
+  const filteredTasks = tasks.filter(task => task.id !== taskId);
   //check if a task was removed
   if (tasks.length !== filteredTasks.length) {
     //save new tasks array
@@ -96,13 +96,13 @@ var removeTask = taskId => {
   }
 };
 
-var editTask = (taskId, taskName) => {
-  var tasks = fetchTasks();
+const editTask = (taskId, taskName) => {
+  const tasks = fetchTasks();
   if (tasks.length === 0) {
     warningNoTasks();
     return;
   }
-  let task = tasks.find(task => {
+  const task = tasks.find(task => {
     return task.id === taskId;
   });
   if (task === undefined) {
