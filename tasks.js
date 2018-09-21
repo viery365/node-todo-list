@@ -42,7 +42,7 @@ const warningNoTasks = () => {
 };
 
 const warningNoTask = taskId => {
-  console.log(`task ${taskId} not found`);
+  console.log(`Task ${taskId} not found`);
   console.log("To see the tasks you have available use: node app.js list");
 };
 
@@ -82,14 +82,30 @@ const removeTask = taskId => {
   const tasks = fetchTasks();
   if (tasks.length === 0) {
     warningNoTasks();
+    return;
   }
+
+  const taskToRemove = tasks.find(task => {
+    return task.id === taskId;
+  });
+
+  let taskName;
+
+  if (taskToRemove) {
+    taskName = taskToRemove.task;
+  }
+
   //filter tasks, removing the one with the same id
   const filteredTasks = tasks.filter(task => task.id !== taskId);
   //check if a task was removed
   if (tasks.length !== filteredTasks.length) {
     //save new tasks array
     saveTasks(filteredTasks);
-    console.log(`Task ${taskId} was removed.`);
+    if (taskName.indexOf('"') > -1) {
+      console.log(`Task ${taskId}: '${taskName}' was removed.`);
+    } else {
+      console.log(`Task ${taskId}: "${taskName}" was removed.`);
+    }
     reorderList();
   } else {
     warningNoTask(taskId);
@@ -107,7 +123,7 @@ const editTask = (taskId, taskName) => {
   });
   if (task === undefined) {
     warningNoTask(taskId);
-    return;
+    return undefined;
   }
   task.task = taskName;
   saveTasks(tasks);

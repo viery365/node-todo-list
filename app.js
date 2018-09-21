@@ -47,9 +47,11 @@ if (command === "add") {
   const taskId = argv.task;
   const taskName = argv.name;
   if (Number.isInteger(taskId) && taskId > 0) {
-    tasks.editTask(taskId, taskName);
-    console.log("Task saved.");
-    tasks.logTask("saved", taskId, taskName);
+    const taskEdited = tasks.editTask(taskId, taskName);
+    if (taskEdited !== undefined) {
+      console.log("Task saved.");
+      tasks.logTask("saved", taskId, taskName);
+    }
   } else if (taskId <= 0) {
     tasks.warningNoTask(taskId);
   } else {
